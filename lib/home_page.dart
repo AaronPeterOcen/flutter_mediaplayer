@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -8,20 +10,50 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MusicPlayerScreen(),
+      home: const MusicPlayerScreen(),
     );
   }
 }
 
 class MusicPlayerScreen extends StatelessWidget {
+  const MusicPlayerScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Music Player'),
+        title: const Text('Music Player'),
       ),
-      body: Center(
-        child: Text('Welcome to the Music Player App!'),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset('assets/album_art.jpg'),
+          SizedBox(height: 20),
+          Text(
+            'Song Title',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          Text('Artist Name'),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: Icon(Icons.skip_previous),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: Icon(Icons.play_arrow),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: Icon(Icons.skip_next),
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
