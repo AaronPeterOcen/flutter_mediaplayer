@@ -23,6 +23,19 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         progress = newPosition.inMilliseconds.toDouble();
       });
     });
+
+    // Listen for duration updates
+    audioPlayer.onDurationChanged.listen((newDuration) {
+      setState(() {
+        totalDuration = newDuration;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.dispose(); // Release resources when the widget is destroyed
+    super.dispose();
   }
 
   @override
@@ -48,11 +61,17 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             onChanged: (value) async {
               if (totalDuration.inMilliseconds > 0) {
                 await audioPlayer.seek(Duration(milliseconds: value.toInt()));
-                setState(() {
-                  progress = value;
-                });
+                setState(
+                  () {
+                    progress = value;
+                  },
+                );
               }
             },
+          ),
+          Text(
+            '${formatDuration(Duration(milliseconds: progress.toInt()))} / ${formatDuration(totalDuration)}',
+            style: TextStyle(fontSize: 16),
           ),
           Text(
             'Song Title',
@@ -90,6 +109,13 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
       ),
     );
   }
+}
+
+String formatDuration(Duration duration) {
+  String twoDigits(int n) => n.toString().padLeft(2, '0');
+  final minutes = twoDigits(duration.inMinutes.remainder(60));
+  final seconds = twoDigits(duration.inSeconds.remainder(60));
+  return '$minutes:$seconds';
 }
 
 class PlaylistScreen extends StatelessWidget {
