@@ -1,7 +1,16 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
-class MusicPlayerScreen extends StatelessWidget {
-  const MusicPlayerScreen({super.key});
+class MusicPlayerScreen extends StatefulWidget {
+  MusicPlayerScreen({super.key});
+
+  @override
+  State<MusicPlayerScreen> createState() => _MusicPlayerScreenState();
+}
+
+class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
+  final AudioPlayer audioPlayer = AudioPlayer();
+  bool isPlaying = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +38,17 @@ class MusicPlayerScreen extends StatelessWidget {
                 onPressed: () {},
               ),
               IconButton(
-                icon: Icon(Icons.play_arrow),
-                onPressed: () {},
+                icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+                onPressed: () {
+                  if (isPlaying) {
+                    audioPlayer.pause();
+                  } else {
+                    audioPlayer.play(AssetSource('assets/N95.mp3'));
+                  }
+                  setState(() {
+                    isPlaying = !isPlaying;
+                  });
+                },
               ),
               IconButton(
                 icon: Icon(Icons.skip_next),
@@ -80,3 +98,4 @@ class Song {
 }
 
 // FlutterError
+
