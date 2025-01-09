@@ -43,7 +43,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   if (isPlaying) {
                     audioPlayer.pause();
                   } else {
-                    audioPlayer.play(AssetSource('assets/N95.mp3'));
+                    audioPlayer.play(AssetSource('N95.mp3'));
                   }
                   setState(() {
                     isPlaying = !isPlaying;
