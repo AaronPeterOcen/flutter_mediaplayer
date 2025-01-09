@@ -11,6 +11,19 @@ class MusicPlayerScreen extends StatefulWidget {
 class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   final AudioPlayer audioPlayer = AudioPlayer();
   bool isPlaying = false;
+  double progress = 0.0;
+  Duration totalDuration = Duration.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen for position changes
+    audioPlayer.onPositionChanged.listen((Duration newPosition) {
+      setState(() {
+        progress = newPosition.inMilliseconds.toDouble();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +37,23 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         children: [
           Image.asset('assets/images/clad.jpg'),
           SizedBox(height: 20),
+          Slider(
+            value: (totalDuration.inMilliseconds > 0)
+                ? progress
+                : 0.0, // Prevent invalid value
+            min: 0.0,
+            max: (totalDuration.inMilliseconds > 0)
+                ? totalDuration.inMilliseconds.toDouble()
+                : 1.0, // Avoid division by zero; default to a safe non-zero value
+            onChanged: (value) async {
+              if (totalDuration.inMilliseconds > 0) {
+                await audioPlayer.seek(Duration(milliseconds: value.toInt()));
+                setState(() {
+                  progress = value;
+                });
+              }
+            },
+          ),
           Text(
             'Song Title',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
